@@ -1,14 +1,32 @@
 <!doctype html>
-
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-
-  <title>She Nailed It!</title>
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <title>She Nailed It!</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-  <h1>Hello world!</h1>
+    <img id="logo" src="she-nailed-it-logo.png" alt="She Nailed It!">
+    <script src="d3/d3.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    d3.text("data.csv", function(data) {
+        var parsedCSV = d3.csv.parseRows(data);
+
+        var container = d3.select("body")
+            .append("table")
+
+            .selectAll("tr")
+            .data(parsedCSV).enter()
+            .append("tr")
+
+            .selectAll("td")
+            .data(function(d) { return d; }).enter()
+            .append("td")
+            .text(function(d) { return d; });
+    });
+    </script>
+</body>
+
 </html>
