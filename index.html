@@ -43,8 +43,6 @@
             download: true,
             header: true,
             complete: function(results) {
-                console.log(results.data);
-
                 results.data.sort(function(a, b) {
                     if (!a["Minutes"] && !a["Seconds"]) {
                         return 1;
@@ -58,16 +56,25 @@
                 $('#left tbody').empty();
                 $('#right tbody').empty();
 
+                var splitAt = Math.floor(results.data.length / 2) - 1;
+
+                console.log(splitAt);
+
+                if (splitAt <= 6) {
+                    $('#right').hide();
+                    $('#left').css('float','none');
+                }
+
                 $.each(results.data, function(key, value) {
                     var num = key + 1;
 
-                    if (key <= 14) {
+                    if (key <= splitAt || splitAt <= 6) {
                         if (value.Minutes || value.Seconds) {
                             $('#left tbody').append('<tr><td class="num">' + num + '</td><td class="name">' + value.Team + '</td><td class="time">' + pad(value.Minutes, 1) + ':' + pad(value.Seconds, 2) + '</td></tr>');
                         } else {
                             $('#left tbody').append('<tr><td class="num"></td><td class="name">' + value.Team + '</td><td class="time"></td></tr>');
                         }
-                    } else {
+                    } else if (key > splitAt) {
                         if (value.Minutes || value.Seconds) {
                             $('#right tbody').append('<tr><td class="num">' + num + '</td><td class="name">' + value.Team + '</td><td class="time">' + pad(value.Minutes, 1) + ':' + pad(value.Seconds, 2) + '</td></tr>');
                         } else {
