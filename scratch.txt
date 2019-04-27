@@ -1,0 +1,114 @@
+/* Gold */
+tbody tr:nth-child(1) {background: gold;}
+/* Silver */
+tbody tr:nth-child(3) {background: #c0c0c0;}
+/* Bronze */
+tbody tr:nth-child(3) {background: #cd7f32;}
+
+
+                $('#leaderboard').dynatable({
+                    dataset: {
+                        records: results.data
+                    }
+                });
+
+
+#leaderboard table {
+    margin: auto;
+    padding: 10px;
+    width: 100%;
+}
+
+
+  
+
+
+                        
+                        download: true,
+                        header: true,
+                        complete: function(results) {
+                            console.log(results.data);
+                      
+
+        
+        $('#leaderboard').DataTable({
+            "ajax": "data.csv"
+        });
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>She Nailed It!</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="jquery.csv.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+</head>
+
+<body>
+    <div id="leaderboard"></div>
+    <script type="text/javascript" charset="utf-8">
+    function updateLeaderboard() {
+        var $table = $('<table id="leaderboardTable"></table>');
+
+        $.get("https://dl.dropbox.com/s/1knrlsc49ltyop2/data.csv", function(data) {
+            var csvData = $.csv.toArrays(data);
+            var $tableHead = $("<thead></thead>");
+            var csvHeaderRow = csvData[0];
+            var $tableHeadRow = $("<tr></tr>");
+            for (var headerIdx = 0; headerIdx < csvHeaderRow.length; headerIdx++) {
+                $tableHeadRow.append($("<th></th>").text(csvHeaderRow[headerIdx]));
+            }
+            $tableHead.append($tableHeadRow);
+
+            $table.append($tableHead);
+            var $tableBody = $("<tbody></tbody>");
+
+            for (var rowIdx = 1; rowIdx < csvData.length; rowIdx++) {
+                var $tableBodyRow = $("<tr></tr>");
+                for (var colIdx = 0; colIdx < csvData[rowIdx].length; colIdx++) {
+                    var $tableBodyRowTd = $("<td></td>");
+
+                    $tableBodyRowTd.text(csvData[rowIdx][colIdx]);
+
+                    $tableBodyRow.append($tableBodyRowTd);
+                    $tableBody.append($tableBodyRow);
+                }
+            }
+
+            $table.append($tableBody);
+        });
+
+        $("#leaderboard").empty().append($table);
+
+        /*
+        setTimeout(function() {
+            updateLeaderboard();
+        }, 10000);
+        */
+    }
+
+
+
+    $(document).ready(function() {
+        updateLeaderboard();
+        $("#leaderboardTable").DataTable({
+        'bSort': false,
+        'aoColumns': [ 
+              { sWidth: "45%", bSearchable: false, bSortable: false }, 
+              { sWidth: "45%", bSearchable: false, bSortable: false }, 
+              { sWidth: "10%", bSearchable: false, bSortable: false } 
+        ],
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "info":           true,
+        "paging":         true
+    } );
+    });
+    </script>
+</body>
+
+</html>
